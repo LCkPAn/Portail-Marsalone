@@ -1,0 +1,42 @@
+{ "columns":0,
+ "grid":
+    {
+     "height":1,
+     "orientation":"orthogonal",
+     "width":1
+    },
+ "margin":0,
+ "name":"Anims",
+ "spacing":0,
+ "tilecount":4,
+ "tiledversion":"1.8.2",
+ "tileheight":192,
+ "tiles":[
+        {
+         "id":0,
+         "image":"..\/..\/deposez assets pour tileset ici\/arbre crepouscoulus.png",
+         "imageheight":192,
+         "imagewidth":128
+        }, 
+        {
+         "id":1,
+         "image":"..\/..\/deposez assets pour tileset ici\/arbre jour lev\u00e9e.png",
+         "imageheight":192,
+         "imagewidth":128
+        }, 
+        {
+         "id":2,
+         "image":"..\/..\/deposez assets pour tileset ici\/arbre jour.png",
+         "imageheight":192,
+         "imagewidth":128
+        }, 
+        {
+         "id":3,
+         "image":"..\/..\/deposez assets pour tileset ici\/arbre nuit.png",
+         "imageheight":192,
+         "imagewidth":128
+        }],
+ "tilewidth":128,
+ "type":"tileset",
+ "version":"1.8"
+}
