@@ -18,7 +18,7 @@ class Planner extends Phaser.Scene {
 
         platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
-        platforms.create(600, 400, 'ground');
+        platforms.create(600, 450, 'ground');
         platforms.create(50, 250, 'ground');
         platforms.create(750, 220, 'ground');
 //CREATION DES ACTIONS DU PERSONNAGE
@@ -58,6 +58,7 @@ class Planner extends Phaser.Scene {
 
         this.physics.add.collider(player, platforms);//AJOUT DE COLLISION ENTRE LE PERSONNAGE ET LES PLATFORMES
 
+
     }
     //LA ON DEFINIT CE QU'IL SE PASSE LORSQU'ON APPUIE SUR TELLE OU TELLE TOUCHE
     initKeyboard() {
@@ -73,13 +74,16 @@ class Planner extends Phaser.Scene {
                     }
                     if (player.body.velocity.y>=20 && me.rightDown){
                         player.setVelocityX(160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A DROITE
+                        player.body.gravity.y = -480;
                         player.setVelocityY(20);
                     }
                     if (player.body.velocity.y>=20 && me.leftDown){
                         player.setVelocityX(-160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A DROITE
+                        player.body.gravity.y = -480;
                         player.setVelocityY(20);
                     }
                     if (!me.leftDown && !me.rightDown && !player.body.touching.down){
+                        player.body.gravity.y = -480;
                         player.setVelocityY(20);
                     }
                     console.log("up")
@@ -89,6 +93,7 @@ class Planner extends Phaser.Scene {
                     console.log('right');
                     if (player.body.velocity.y>=20 && me.upDown){
                         player.setVelocityX(160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A DROITE
+                        player.body.gravity.y = -480;
                         player.setVelocityY(20);
                     }
                     else {
@@ -100,6 +105,7 @@ class Planner extends Phaser.Scene {
                     me.leftDown=true;
                     if (player.body.velocity.y>=20 && me.upDown){
                         player.setVelocityX(-160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A DROITE
+                        player.body.gravity.y = -480;
                         player.setVelocityY(20);
                     }
                     else {
@@ -114,23 +120,26 @@ class Planner extends Phaser.Scene {
             switch (kevent.keyCode) {
                 case Phaser.Input.Keyboard.KeyCodes.UP:
                     me.upDown=false;
+                    player.body.gravity.y = 0;
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
                     me.rightDown=false;
+                    player.body.gravity.y = 0;
                     player.setVelocityX(0);//LE PERSO NE BOUGE PAS
 
                     player.anims.play('turn');//ET ON JOUE L'ANIMATION TUR CREE DANS LA FONCTION CREATE
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
                     me.leftDown=false;
+                    player.body.gravity.y = 0;
                     player.setVelocityX(0);//LE PERSO NE BOUGE PAS
 
                     player.anims.play('turn');//ET ON JOUE L'ANIMATION TUR CREE DANS LA FONCTION CREATE
 
                     break;
             }
-        kevent.preventDefault();
-        },true);
+
+        });
     }
     update ()
     {
