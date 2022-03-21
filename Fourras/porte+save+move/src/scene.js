@@ -81,17 +81,17 @@ class scene extends Phaser.Scene {
     this.physics.add.collider(this.moves, this.platforms)
 
     this.player = new Player(this)
-/** gorupe des spike*/
-    this.spikes = this.physics.add.group({
-      allowGravity: false,
-      immovable: true
-    });
-
-    map.getObjectLayer('Spikes').objects.forEach((spike) => {
-      const spikeSprite = this.spikes.create(spike.x, spike.y + 200 - spike.height, 'spike').setOrigin(0);
-      spikeSprite.body.setSize(spike.width, spike.height - 20).setOffset(0, 20);
-    });
-    this.physics.add.collider(this.player.player, this.spikes, this.playerHit, null, this);
+/** gorupe des trou*/
+this.trous = this.physics.add.group({
+    allowGravity: false,
+    immovable: true
+});
+// ceci permet au images que vous avez placé sur Tiled d'avoir une boite de colision mais aussi d'etre invisible
+      map.getObjectLayer('Trous').objects.forEach((spike) => {
+          //si vous utilisez une autre image que les piques remplacez le 'spike' avec le nom de l'image que vous avez remplacé (le nom déclaré dans preload)
+          const trousSprite = this.trous.create(spike.x, spike.y + 200 - spike.height, 'spike').setOrigin(0).visible = false ;
+      });
+    this.physics.add.collider(this.player.player, this.trous, this.playerHit, null, this);
 
     /** groupe des saves*/
     this.saves = this.physics.add.group({
