@@ -5,7 +5,7 @@ class Tableau1 extends Phaser.Scene {
     preload() {
         this.load.image('luciole', 'deposez assets pour tileset ici/luciole.png');
         this.load.image('yellowFlares', 'deposez assets pour tileset ici/yellowFlares.png');
-        this.load.atlas('player', 'assets/images/kenney_player.png', 'assets/images/kenney_player_atlas.json');
+
     }
 
     function
@@ -13,33 +13,7 @@ class Tableau1 extends Phaser.Scene {
     create() {
 
 
-        this.player = this.physics.add.sprite(50, 300, 'player');
-        this.player.setBounce(0.1);
-        this.player.setCollideWorldBounds(false);
 
-
-        this.anims.create({
-            key: 'walk',
-            frames: this.anims.generateFrameNames('player', {
-                prefix: 'robo_player_',
-                start: 2,
-                end: 3,
-            }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'idle',
-            frames: [{key: 'player', frame: 'robo_player_0'}],
-            frameRate: 10,
-        });
-
-        this.anims.create({
-            key: 'jump',
-            frames: [{key: 'player', frame: 'robo_player_1'}],
-            frameRate: 10,
-        });
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
