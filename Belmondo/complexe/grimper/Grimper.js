@@ -12,7 +12,7 @@ class Grimper extends Phaser.Scene {
     //ON DETERMINE DANS LA FONCTION CREATE CE QUE FONT NOS ASSETS
     create ()
     {
-      
+
 
         this.add.image(400, 300, 'sky');
 
