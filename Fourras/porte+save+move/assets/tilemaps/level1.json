@@ -96,6 +96,18 @@
                  "width":64,
                  "x":1024.6394596116,
                  "y":256.441317196735
+                }, 
+                {
+                 "gid":7,
+                 "height":64,
+                 "id":35,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1664,
+                 "y":256
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -197,16 +209,16 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":35,
+ "nextobjectid":36,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.8.2",
+ "tiledversion":"1.7.2",
  "tileheight":64,
  "tilesets":[
         {
          "columns":14,
          "firstgid":1,
-         "image":"..\/tilesets\/platformPack_tilesheet.png",
+         "image":"..\/..\/..\/..\/..\/..\/GitHub\/Team_fourras\/assets\/tilesets\/platformPack_tilesheet.png",
          "imageheight":448,
          "imagewidth":896,
          "margin":0,
@@ -1101,6 +1113,6 @@
         }],
  "tilewidth":64,
  "type":"map",
- "version":"1.8",
+ "version":"1.6",
  "width":43
 }
