@@ -12,7 +12,7 @@ class Grimper extends Phaser.Scene {
     //ON DETERMINE DANS LA FONCTION CREATE CE QUE FONT NOS ASSETS
     create ()
     {
-        this.climb=false;
+      
 
         this.add.image(400, 300, 'sky');
 
@@ -31,7 +31,7 @@ class Grimper extends Phaser.Scene {
         platforms.create(50, 250, 'ground');
         platforms.create(750, 220, 'ground');
 //CREATION DES ACTIONS DU PERSONNAGE
-        player = this.physics.add.sprite(100, 450, 'dude');
+        this.player=player = this.physics.add.sprite(100, 450, 'dude');
 
         //player.setBounce(0.2);// REBONDISSEMENT DU PERSONNAGE LORSQU'IL SAUTE
         player.setCollideWorldBounds(true);//COLLISION AVEC TOUS LES OBJETS DU JEU
@@ -68,21 +68,17 @@ class Grimper extends Phaser.Scene {
 
 
 
-        this.physics.add.overlap(
-            player,
-            this.lianne)
+        this.physics.add.overlap(player, this.lianne,this.test.bind(this),null,this)
 
         this.initKeyboard()
     }
 
-    checkLianne(){
-        this.onLianne=false;
-        if (!player.body.onFloor()){
-            if (!player.body.touching.none){
-                this.onLianne=true;
-            }
-        }
+    test(player, lianne){
+        this.player.onlianne=true
+        console.log(player.onlianne)
     }
+
+
 
     //LA ON DEFINIT CE QU'IL SE PASSE LORSQU'ON APPUIE SUR TELLE OU TELLE TOUCHE
     initKeyboard() {
@@ -91,11 +87,6 @@ class Grimper extends Phaser.Scene {
             switch (kevent.keyCode) {
                 case Phaser.Input.Keyboard.KeyCodes.UP:
                     me.upDown=true;
-                    me.checkLianne();
-                    console.log(me.onLianne)
-                    if (me.onLianne){
-                        player.setVelocityY(-130);
-                    }
                     if (player.body.onFloor())
                     {
                         player.setVelocityY(-330);//LE JOUR VA A UNE VITESSE DE 330 VERS LE HAUT
@@ -114,11 +105,6 @@ class Grimper extends Phaser.Scene {
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.DOWN:
                     me.downDown=true;
-                    me.checkLianne();
-                    console.log(me.onLianne)
-                    if (me.onLianne){
-                        player.setVelocityY(130);
-                    }
                     break;
             }
         });
@@ -144,16 +130,26 @@ class Grimper extends Phaser.Scene {
             }
         });
     }
+
     update ()
     {
-        this.checkLianne()
-        if (this.onLianne && !this.upDown && !this.downDown){
-            player.setVelocityY(0);
-            player.body.setAllowGravity(false);
+        if(this.player.onlianne){
+            this.player.onlianne=false
+            if (this.upDown){
+                player.setVelocityY(-100);
+                player.body.setAllowGravity(true);
+            }
+            else if (this.downDown){
+                player.setVelocityY(100);
+                player.body.setAllowGravity(true);
+            }
+            else{
+                player.setVelocityY(0);
+                player.body.setAllowGravity(false);
+
+            }
         }
-        else {
-            player.body.setAllowGravity(true);
-        }
+
     }
 
 }
