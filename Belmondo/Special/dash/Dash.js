@@ -1,4 +1,4 @@
-class Planner extends Phaser.Scene {
+class Dash extends Phaser.Scene {
     //ON PRECHARGE TOUS NOS ASSETS
     preload ()
     {
@@ -22,6 +22,24 @@ class Planner extends Phaser.Scene {
         platforms.create(50, 250, 'ground');
         platforms.create(750, 220, 'ground');
 
+
+        this.toto={
+            a:0,
+        }
+        this.toto.setVelocity(this.toto.a)
+
+
+        this.tweens.add({
+            targets: this.toto,
+            a: 100,
+            // alpha: { start: 0, to: 1 },
+            // alpha: 1,
+            // alpha: '+=1',
+            ease: "Linear", // 'Cubic', 'Elastic', 'Bounce', 'Back'
+            duration: 2000,
+            repeat: -1, // -1: infinity
+            yoyo: true
+        });
 
 //CREATION DES ACTIONS DU PERSONNAGE
         this.player = this.physics.add.sprite(100, 450, 'dude');
@@ -78,7 +96,7 @@ class Planner extends Phaser.Scene {
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
                     me.rightDown=true;
                     console.log('right');
-                        me.player.setVelocityX(160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A DROITE
+                    me.player.setVelocityX(160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A DROITE
                     me.player.anims.play('right', true);//ET ON LUI DEMANDE DE LANCER L'ANIMATION RIGHT QU'ON A CREE DANS LA FONCTION CREATE
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
@@ -92,6 +110,7 @@ class Planner extends Phaser.Scene {
             switch (kevent.keyCode) {
                 case Phaser.Input.Keyboard.KeyCodes.UP:
                     me.upDown=false;
+
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
                     me.rightDown=false;
@@ -113,12 +132,10 @@ class Planner extends Phaser.Scene {
     }
     update ()
     {
+        console.log(this.toto,this.toto.a)
         if (this.upDown && this.player.body.velocity.y>20){
             this.player.body.setMaxVelocityY(20)
             console.log(this.player.body.velocity.y);
-        }
-        if (!this.upDown){
-            this.player.body.setMaxVelocityY(2000)
         }
     }
 
