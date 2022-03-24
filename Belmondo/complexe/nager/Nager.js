@@ -25,7 +25,7 @@ class Nager extends Phaser.Scene {
         platforms.create(750, 350, 'ground').setDisplaySize(100,400).refreshBody();
 
 //CREATION DES ACTIONS DU PERSONNAGE
-        player = this.physics.add.sprite(50, 100, 'dude');
+        this.player = player = this.physics.add.sprite(50, 100, 'dude');
 
         //player.setBounce(0.2);// REBONDISSEMENT DU PERSONNAGE LORSQU'IL SAUTE
         player.setCollideWorldBounds(true);//COLLISION AVEC TOUS LES OBJETS DU JEU
@@ -65,16 +65,17 @@ class Nager extends Phaser.Scene {
 
         this.physics.add.collider(player, platforms);//AJOUT DE COLLISION ENTRE LE PERSONNAGE ET LES PLATFORMES
 
-        this.physics.add.overlap(player, this.water );
+        this.physics.add.overlap(player, this.water,this.test.bind(this),null,this);
 
         this.initKeyboard()
     }
-    checkWater(){
-        this.inWater=false;
-            if (!player.body.touching.none){
-                this.inWater=true;
-            }
+
+    test(player, water){
+        this.player.inwater=true;
+        console.log(player.inwater);
     }
+
+
 
     //LA ON DEFINIT CE QU'IL SE PASSE LORSQU'ON APPUIE SUR TELLE OU TELLE TOUCHE
     initKeyboard() {
@@ -82,81 +83,79 @@ class Nager extends Phaser.Scene {
         this.input.keyboard.on('keydown', function (kevent) {
             switch (kevent.keyCode) {
                 case Phaser.Input.Keyboard.KeyCodes.UP:
-                    if (me.inWater){
-                        player.setVelocityY(-100);
-                    }
-                    else if (player.body.onFloor() && !me.inWater)
+                    me.upDown=true;
+                    if (player.body.onFloor() && !me.player.inwater)
                     {
                         player.setVelocityY(-330);//LE JOUR VA A UNE VITESSE DE 330 VERS LE HAUT
                     }
                     console.log("jump");
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
-                    if (me.inWater){
-                        player.setVelocityX(100);
-                    }
-                    else {
+                    me.rightDown=true;
+                    if (!player.inwater){
                         player.setVelocityX(160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A DROITE
 
                         player.anims.play('right', true);//ET ON LUI DEMANDE DE LANCER L'ANIMATION RIGHT QU'ON A CREE DANS LA FONCTION CREATE
                     }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
-                    if (me.inWater){
-                        player.setVelocityX(-100);
-                    }
-                    else {
+                    me.leftDown=true;
+                    if (!player.inwater){
                         player.setVelocityX(-160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A GAUCHE
 
                         player.anims.play('left', true);//ET ON LUI DEMANDE DE LANCER L'ANIMATION LEFT QU'ON A CREE DANS LA FONCTION CREATE
                     }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.DOWN:
-                    if (me.inWater){
-                        player.setVelocityY(100);
-                    }
+                    me.downDown=true;
                     break;
             }
         });
         this.input.keyboard.on('keyup', function (kevent) {
             switch (kevent.keyCode) {
                 case Phaser.Input.Keyboard.KeyCodes.UP:
-                    if (me.inWater){
-                        player.setVelocityY(0);
-                    }
+                    me.upDown=false;
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+                    me.rightDown=false;
                     player.setVelocityX(0);//LE PERSO NE BOUGE PAS
 
                     player.anims.play('turn');//ET ON JOUE L'ANIMATION TUR CREE DANS LA FONCTION CREATE
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
+                    me.leftDown=false;
                     player.setVelocityX(0);//LE PERSO NE BOUGE PAS
 
                     player.anims.play('turn');//ET ON JOUE L'ANIMATION TUR CREE DANS LA FONCTION CREATE
 
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.DOWN:
-                    if (me.inWater){
-                        player.setVelocityY(0);
-                    }
+                    me.downDown=false;
                     break;
             }
         });
     }
-    update ()
-    {
-        this.checkWater()
-        if (player.body.touching.none || player.body.onFloor()){
-        player.body.setGravity(0,0);
-        this.inWater=false;
-        console.log('!inWtaer')
+    update () {
+        if (this.player.inwater) {
+            this.player.inwater = false;
+            player.body.setGravity(0, -320);
+
+            if (this.upDown) {
+                player.setVelocityY(-100);
+
+            } else if (this.downDown) {
+                player.setVelocityY(100);
+
+            } else if (this.leftDown){
+                player.setVelocityX(-100);
             }
-        else if (this.inWater){
-            player.body.setGravity(0,-320);
-            console.log('inWater')
+            else if (this.rightDown){
+                player.setVelocityX(100);
+            }
+        }
+        if (this.player.body.touching.none || this.player.body.onFloor()){
+            player.body.setGravity(0,0);
         }
     }
-
 }
 

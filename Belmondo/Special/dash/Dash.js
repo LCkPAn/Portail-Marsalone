@@ -127,7 +127,6 @@ class Dash extends Phaser.Scene {
 
                     break;
             }
-
         });
     }
     update ()
