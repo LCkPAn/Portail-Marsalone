@@ -94,11 +94,13 @@ class Grimper extends Phaser.Scene {
                     }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+                    me.rightDown=true;
                     player.setVelocityX(160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A DROITE
 
                     player.anims.play('right', true);//ET ON LUI DEMANDE DE LANCER L'ANIMATION RIGHT QU'ON A CREE DANS LA FONCTION CREATE
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
+                    me.leftDown=true;
                     player.setVelocityX(-160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A GAUCHE
 
                     player.anims.play('left', true);//ET ON LUI DEMANDE DE LANCER L'ANIMATION LEFT QU'ON A CREE DANS LA FONCTION CREATE
@@ -114,11 +116,13 @@ class Grimper extends Phaser.Scene {
                     me.upDown=false;
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+                    me.rightDown=false;
                     player.setVelocityX(0);//LE PERSO NE BOUGE PAS
 
                     player.anims.play('turn');//ET ON JOUE L'ANIMATION TUR CREE DANS LA FONCTION CREATE
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
+                    me.leftDown=false;
                     player.setVelocityX(0);//LE PERSO NE BOUGE PAS
 
                     player.anims.play('turn');//ET ON JOUE L'ANIMATION TUR CREE DANS LA FONCTION CREATE
@@ -149,7 +153,11 @@ class Grimper extends Phaser.Scene {
 
             }
         }
-
+        if (!this.player.onlianne){
+            if (this.downDown || this.upDown || this.rightDown || this.leftDown){
+                player.body.setAllowGravity(true);
+            }
+        }
     }
 
 }
