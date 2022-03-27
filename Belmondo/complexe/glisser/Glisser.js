@@ -168,6 +168,5 @@ class Glisser extends Phaser.Scene {
             }
         }
     }
-
 }
 
