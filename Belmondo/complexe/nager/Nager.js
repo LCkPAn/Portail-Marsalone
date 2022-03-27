@@ -1,5 +1,8 @@
 class Nager extends Phaser.Scene {
     //ON PRECHARGE TOUS NOS ASSETS
+
+
+
     preload ()
     {
         this.load.image('sky', 'assets/sky.png');
@@ -13,6 +16,7 @@ class Nager extends Phaser.Scene {
     //ON DETERMINE DANS LA FONCTION CREATE CE QUE FONT NOS ASSETS
     create ()
     {
+        this.waterFlag = false;
         this.add.image(400, 300, 'sky');
 
 
@@ -126,7 +130,7 @@ class Nager extends Phaser.Scene {
                     me.leftDown=false;
                     player.setVelocityX(0);//LE PERSO NE BOUGE PAS
 
-                    player.anims.play('turn');//ET ON JOUE L'ANIMATION TUR CREE DANS LA FONCTION CREATE
+                    player.anims.play('turn');//ET ON JOUE L'ANIMATION TURN CREE DANS LA FONCTION CREATE
 
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.DOWN:
@@ -142,15 +146,26 @@ class Nager extends Phaser.Scene {
 
             if (this.upDown) {
                 player.setVelocityY(-100);
+                this.waterFlag=false;
 
             } else if (this.downDown) {
                 player.setVelocityY(100);
+                this.waterFlag=false;
 
             } else if (this.leftDown){
                 player.setVelocityX(-100);
             }
             else if (this.rightDown){
                 player.setVelocityX(100);
+            }
+
+            if (!this.upDown && !this.downDown){
+                if (this.waterFlag){
+
+                }else {
+                    player.setVelocityY(0);
+                    this.waterFlag=true;
+                }
             }
         }
         if (this.player.body.touching.none || this.player.body.onFloor()){
