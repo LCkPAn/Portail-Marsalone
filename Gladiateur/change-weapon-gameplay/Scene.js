@@ -10,6 +10,8 @@ class Scene extends Phaser.Scene {
     // chargement du fond et du yoyo
     this.load.image("bg", "bg.png");
     this.load.image("sword", "sword.png");
+    this.load.image("yoyo", "yoyo.png");
+    this.load.image("enemy", "enemy.png");
 
     // chargement sprite joueur
     this.load.spritesheet('player', 'player.png', {frameWidth: 48, frameHeight: 48});
@@ -49,24 +51,37 @@ class Scene extends Phaser.Scene {
     this.player.setCollideWorldBounds(true);
     this.player.setDepth(0);
 
-    this.sword = this.physics.add.sprite(200, 100, "sword").setScale(.1);
+    this.sword = this.physics.add.sprite(200, 100, "sword").setScale(0.1);
     this.sword.body.setAllowGravity(false);
     this.sword.setDepth(1);
     this.sword.setVisible(false);
     this.sword.attack = 100
     this.sword.disableBody()
 
-    this.enemy = this.physics.add.sprite(700, 100).setDisplaySize(50,100)
+    this.enemy = this.physics.add.sprite(500, 100, "enemy").setDisplaySize(50,100)
     this.enemy.setCollideWorldBounds(true);
     this.enemy.setDepth(0);
     this.enemy.body.setImmovable(true)
     this.enemy.hp = 100;
+
+    this.enemy2 = this.physics.add.sprite(700, 100, "enemy").setDisplaySize(50,100)
+    this.enemy2.setCollideWorldBounds(true);
+    this.enemy2.setDepth(0);
+    this.enemy2.body.setImmovable(true)
+    this.enemy2.hp = 100;
+
+    this.enemy3 = this.physics.add.sprite(900, 100, "enemy").setDisplaySize(50,100)
+    this.enemy3.setCollideWorldBounds(true);
+    this.enemy3.setDepth(0);
+    this.enemy3.body.setImmovable(true)
+    this.enemy3.hp = 100;
 
     this.yoyo = this.physics.add.sprite(this.player.x, this.player.y, "yoyo")
     this.yoyo.setScale(2)
     this.yoyo.setDepth(0);
     this.yoyo.setDisplaySize(20, 20)
     this.yoyo.launch = false;
+    this.yoyo.attack = 100
     this.yoyo.body.setAllowGravity(false)
 
     // ancrage de la caméra sur le joueur
@@ -79,6 +94,12 @@ class Scene extends Phaser.Scene {
     this.physics.add.collider(this.enemy, this.platforms);
     this.physics.add.collider(this.sword, this.enemy);
 
+    this.physics.add.collider(this.player, this.enemy2);
+    this.physics.add.collider(this.enemy2, this.platforms);
+
+    this.physics.add.collider(this.player, this.enemy3);
+    this.physics.add.collider(this.enemy3, this.platforms);
+
     //Ajout des controles
     this.inputManager()
 
@@ -86,75 +107,90 @@ class Scene extends Phaser.Scene {
     this.animManager()
 
     this.weaponEquipped = 0
-
-    if(this.weaponEquipped === 0){
-      this.swordWeapon();
-    }
-    else if(this.weaponEquipped === 1){
-      this.yoyoWeapon();
-    }
-
   }
 
   yoyoWeapon(){
-    this.input.on('pointerdown', function (pointer) {
-      //Si le yoyo n'est pas deja lancé et que la distance entre le pointeur de la souris et le joueur est assez petite on rentre dans la focntion
-      if(this.yoyo.launch === false && Phaser.Math.Distance.Between(this.player.x, this.player.y, pointer.worldX, pointer.worldY) <= 200){
+    if(this.weaponEquipped === 0) {
+      this.input.on('pointerdown', function (pointer) {
+        //Si le yoyo n'est pas deja lancé et que la distance entre le pointeur de la souris et le joueur est assez petite on rentre dans la focntion
+        if (this.yoyo.launch === false && Phaser.Math.Distance.Between(this.player.x, this.player.y, pointer.worldX, pointer.worldY) <= 200) {
 
-        //this.drawLine()
-        //On desactive le clavier pour que le joueur ne puisse plus bouger
-        this.input.keyboard.enabled = false;
-        //On indique qu'on est en train de lancer le yoyo avec le booleen launch
-        this.yoyo.launch = true;
-        //On reset la velocité du joueur
-        this.player.setVelocityX(0);
-        this.player.setVelocityY(0);
-        //On desactive ça soumission a la gravité et on le rend immobile
-        this.player.body.setAllowGravity(false)
-        this.player.body.setImmovable(true)
-        //On ajoute un tween pour creer le mouvement du yoyo
-        this.yoyoTween = this.tweens.add({
-          //La cible du tween est le yoyo (l'objet qu'il fera bouger)
-          targets: this.yoyo,
-          //On lui donne les coordonnées de la destination
-          x: pointer.worldX,
-          y: pointer.worldY,
-          //On definit ça durée
-          duration: 300,
-          //On definit son type de mouvement
-          ease: 'Power2',
-          //On active le parametre yoyo pour que le mouvement revienne a sa position initial
-          yoyo: true,
-        });
-      }
-    }, this);
+          //this.drawLine()
+          //On desactive le clavier pour que le joueur ne puisse plus bouger
+          if(this.weaponEquipped === 0){
+            this.input.keyboard.enabled = false;
+          }
+          //On indique qu'on est en train de lancer le yoyo avec le booleen launch
+          this.yoyo.launch = true;
+          //On reset la velocité du joueur
+          this.player.setVelocityX(0);
+          this.player.setVelocityY(0);
+          //On desactive ça soumission a la gravité et on le rend immobile
+          this.player.body.setAllowGravity(false)
+          this.player.body.setImmovable(true)
+          //On ajoute un tween pour creer le mouvement du yoyo
+          this.yoyoTween = this.tweens.add({
+            //La cible du tween est le yoyo (l'objet qu'il fera bouger)
+            targets: this.yoyo,
+            //On lui donne les coordonnées de la destination
+            x: pointer.worldX,
+            y: pointer.worldY,
+            //On definit ça durée
+            duration: 300,
+            //On definit son type de mouvement
+            ease: 'Power2',
+            //On active le parametre yoyo pour que le mouvement revienne a sa position initial
+            yoyo: true,
+          });
+          let me = this;
+          //On enleve des points de vie a l'enemie qu'on touche
+          this.physics.add.overlap(this.yoyo, this.enemy, function () {
+            me.enemy.hp -= me.yoyo.attack;
+          })
+          this.physics.add.overlap(this.yoyo, this.enemy2, function () {
+            me.enemy2.hp -= me.yoyo.attack;
+          })
+          this.physics.add.overlap(this.yoyo, this.enemy3, function () {
+            me.enemy3.hp -= me.yoyo.attack;
+          })
+        }
+      }, this);
+    }
   }
 
   swordWeapon(){
-    //Quand on clique avec la souris on fait apparaitre l'épée
-    this.input.on('pointerdown', function (pointer) {
+    if(this.weaponEquipped === 1) {
+      //Quand on clique avec la souris on fait apparaitre l'épée
+      this.input.on('pointerdown', function (pointer) {
 
-      //On rend l'épée visible
-      this.sword.setVisible(true);
-      //On active le body de l'épée
-      this.sword.enableBody()
-      //On ajoute un event avec un delay qui fera disparaitre l'épée pendant 250 ms
-      this.time.addEvent({ delay: 250, callback: this.onEvent, callbackScope: this });
+        //On rend l'épée visible
+        this.sword.setVisible(true);
+        //On active le body de l'épée
+        this.sword.enableBody()
+        //On ajoute un event avec un delay qui fera disparaitre l'épée pendant 250 ms
+        this.time.addEvent({delay: 250, callback: this.onEvent, callbackScope: this});
 
-    }, this);
+      }, this);
 
-    let me = this;
-    //On enleve des points de vie a l'enemie qu'on touche
-    this.physics.add.overlap(this.sword, this.enemy, function (){
-      me.enemy.hp -= me.sword.attack;
-    })
+      let me = this;
+      //On enleve des points de vie a l'enemie qu'on touche
+      this.physics.add.overlap(this.sword, this.enemy, function () {
+        me.enemy.hp -= me.sword.attack;
+      })
+      this.physics.add.overlap(this.sword, this.enemy2, function () {
+        me.enemy2.hp -= me.sword.attack;
+      })
+      this.physics.add.overlap(this.sword, this.enemy3, function () {
+        me.enemy3.hp -= me.sword.attack;
+      })
+    }
   }
 
   //Event qui permet de faire disparaitre l'épée
   onEvent()
   {
-    this.sword.disableBody()
-    this.sword.setVisible(false);
+      this.sword.disableBody()
+      this.sword.setVisible(false);
   }
 
   //Input Manager va nous permettre de gerer les differents input
@@ -180,6 +216,22 @@ class Scene extends Phaser.Scene {
           //On joue l'animation qui correspond
           this.player.anims.play('jump', true);
         }
+    }, this);
+
+    this.input.keyboard.on('keydown-E', function () {
+      if(this.weaponEquipped === 0){
+        this.sword.disableBody()
+        this.yoyo.enableBody()
+        this.yoyo.setVisible(true);
+        this.sword.setVisible(false);
+        this.weaponEquipped = 1;
+      }else if(this.weaponEquipped === 1){
+        this.yoyo.disableBody()
+        this.sword.enableBody()
+        this.sword.setVisible(true);
+        this.yoyo.setVisible(false);
+        this.weaponEquipped = 0;
+      }
     }, this);
 
     //Ici on va gerer les evenements quand on relache une touche
@@ -222,42 +274,70 @@ class Scene extends Phaser.Scene {
   }
 
   update() {
+    this.yoyoWeapon();
+    this.swordWeapon();
     //Si le personnage est au sol et ne se deplace pas on le mets en etat d'idle
     if (this.player.body.blocked.down && this.player.body.velocity.x === 0) {
       this.player.anims.play('idle', true);
     }
-    this.sword.x = this.player.x+40;
-    this.sword.y = this.player.y;
+    if(this.weaponEquipped === 1){
+      this.sword.x = this.player.x+40;
+      this.sword.y = this.player.y;
+      this.player.body.setAllowGravity(true)
+      this.player.body.setImmovable(false)
+    }
 
     if(this.enemy.hp <= 0){
       this.enemy.disableBody()
       this.enemy.setVisible(false)
     }
-
-    if(!this.yoyo.launch){
-      this.yoyo.x = this.player.x;
-      this.yoyo.y = this.player.y;
+    if(this.enemy2.hp <= 0){
+      this.enemy2.disableBody()
+      this.enemy2.setVisible(false)
     }
-    //Sinon on reset la velocité du joueur
-    else{
-      this.player.body.velocity.x = 0;
-      this.player.body.velocity.y = 0;
+    if(this.enemy3.hp <= 0){
+      this.enemy3.disableBody()
+      this.enemy3.setVisible(false)
+    }
 
-      //this.drawLine()
-      //Une fois l'animation terminée
-      if(this.yoyoTween.progress === 1){
-        //On reactive le clavier
-        this.input.keyboard.enabled = true;
-        //this.redraw()
-        //On remets le booleen launch a false pour indiquer qu'on ne lance plus le yoyo
-        this.yoyo.launch = false;
-        //On remets les valeurs par defauts du joueur
-        this.player.body.setAllowGravity(true)
-        this.player.body.setImmovable(false)
+
+    if(this.weaponEquipped === 0){
+      if(!this.yoyo.launch){
+        this.yoyo.x = this.player.x;
+        this.yoyo.y = this.player.y;
+      }
+      //Sinon on reset la velocité du joueur
+      else{
+        this.player.body.velocity.x = 0;
+        this.player.body.velocity.y = 0;
+
+        //this.drawLine()
+        //Une fois l'animation terminée
+        if(this.yoyoTween.progress === 1){
+          //On reactive le clavier
+          this.input.keyboard.enabled = true;
+          //this.redraw()
+          //On remets le booleen launch a false pour indiquer qu'on ne lance plus le yoyo
+          this.yoyo.launch = false;
+          //On remets les valeurs par defauts du joueur
+          this.player.body.setAllowGravity(true)
+          this.player.body.setImmovable(false)
+        }
       }
     }
 
-    //console.log(this.enemy.hp)
+    if(this.weaponEquipped === 0){
+      this.sword.disableBody()
+      this.yoyo.enableBody()
+      this.yoyo.setVisible(true);
+      this.sword.setVisible(false);
+    }else if(this.weaponEquipped === 1){
+      this.yoyo.disableBody()
+      this.yoyo.setVisible(false);
+    }
+
+    //console.log(this.weaponEquipped);
+    //console.log(this.input.keyboard.enabled)
   }
 }
 

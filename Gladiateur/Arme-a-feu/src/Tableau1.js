@@ -20,10 +20,9 @@ class Tableau1 extends Phaser.Scene {
 
 
     create() {
-        this.dirx = 0;
-        this.diry = 0;
         this.NbBalle = 40;
         this.chargeur = 10;
+        this.Pballe = true ;
 
         // Création du personnage armé
         this.persoA = this.physics.add.sprite(500, 0, 'circleG').setOrigin(0, 0);
@@ -32,7 +31,7 @@ class Tableau1 extends Phaser.Scene {
         this.persoA.setVisible(true);
 
 
-        // Création d'un boss a tuer
+        // Création d'une cible à tuer
         this.boss = this.physics.add.sprite(150, 0,'boss').setOrigin(0, 0);
         this.boss.setDisplaySize(50,50);
         this.boss.body.setAllowGravity(true);
@@ -44,10 +43,12 @@ class Tableau1 extends Phaser.Scene {
         this.munition.body.setAllowGravity(true);
         this.munition.setImmovable(true);
 
-
-
-
-
+        // Création d'une caisse de munition
+        this.target = this.physics.add.sprite(450, 0,'circleB').setOrigin(0, 0);
+        this.target.setDisplaySize(10,10);
+        this.target.body.setAllowGravity(false);
+        this.target.setImmovable(false);
+        this.target.setVisible(false);
 
         // chargement de la map
         const map = this.add.tilemap("map");
@@ -65,6 +66,17 @@ class Tableau1 extends Phaser.Scene {
 
         platforms.setCollisionByExclusion(-1, true);
 
+        if(this.Pballe === true){
+            this.input.on('pointerdown', function (pointer) {
+
+                this.tir();
+                console.log(this.chargeur);
+            }, this);
+        }else {
+            console.log("Plus de balle")
+
+        }
+
         // Creation des collision
 
         this.physics.add.collider(this.persoA, platforms);
@@ -80,25 +92,18 @@ class Tableau1 extends Phaser.Scene {
 
     checkCollider(Objet1x,Objet1y,Object1TailleLargeur,Object1TailleHauteur,Objet2x,Objet2y,Objet2TaileLargeur,Objet2TailleHauteur){
         if (Objet1x + Object1TailleLargeur > Objet2x && Objet1x < Objet2x + Objet2TaileLargeur
-                                            &&
+            &&
             Objet1y + Object1TailleHauteur > Objet2y && Objet1y < Objet2y + Objet2TailleHauteur) {
             // Si toutes les conditons sont vrais alors il y a bien un overlaps, on renvoie donc true/vrai a notre foncion sinon on ne renvoie rien
             return true
         }
     }
 
+
     tir(){let me = this;
         this.chargeur -= 1;
         this.balle = new Balle(this);
 
-        this.physics.add.collider(this.boss, this.balle, function (){
-            console.log("ok")
-            me.boss.body.setEnable(false);
-            me.boss.setVisible(false);
-
-            me.balle.body.setEnable(false);
-            me.balle.setVisible(false);
-        })
     }
 
 
@@ -128,7 +133,7 @@ class Tableau1 extends Phaser.Scene {
 
                 case Phaser.Input.Keyboard.KeyCodes.Q:
 
-                        me.persoA.setVelocityX(-300);
+                    me.persoA.setVelocityX(-300);
 
                     break;
 
@@ -148,127 +153,9 @@ class Tableau1 extends Phaser.Scene {
 
                     break;
 
-                    // les tires dans chaque directions
-
-                case Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR:
-
-                    if(me.chargeur === 0){
-                        console.log("plus de balle")
-                    }else {
-                        me.diry = 0
-                        me.dirx = -500
-                        me.tir();
-
-                        console.log(me.chargeur)
-                    }
-
-                    break;
-                case Phaser.Input.Keyboard.KeyCodes.NUMPAD_EIGHT:
-
-                    if(me.chargeur === 0){
-                        console.log("plus de balle")
-                    }else {
-
-                        me.diry = -500
-                        me.dirx = 0
-                        me.tir(0,-500);
-
-                        console.log(me.chargeur)
-                    }
-
-                    break;
-                case Phaser.Input.Keyboard.KeyCodes.NUMPAD_SEVEN:
-
-                    if(me.chargeur === 0){
-                        console.log("plus de balle")
-                    }else {
-
-                        me.diry = -250
-                        me.dirx = -250
-                        me.tir();
-
-                    console.log(me.chargeur)
-                    }
-
-                    break;
-                case Phaser.Input.Keyboard.KeyCodes.NUMPAD_NINE:
-
-                    if(me.chargeur === 0){
-                        console.log("plus de balle")
-                    }else {
-
-                        me.diry = -250
-                        me.dirx = 250
-                        me.tir();
-
-                        console.log(me.chargeur)
-                    }
-
-
-                    break;
-                case Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX:
-
-                    if(me.chargeur === 0){
-                        console.log("plus de balle")
-                    }else{
-
-                        me.diry = 0
-                        me.dirx = 500
-                        me.tir();
-
-                        console.log(me.chargeur)
-                    }
-
-
-                        break;
-                case Phaser.Input.Keyboard.KeyCodes.NUMPAD_THREE:
-
-                    if(me.chargeur === 0){
-                        console.log("plus de balle")
-                    }else {
-
-                        me.diry = 250
-                        me.dirx = 250
-                        me.tir();
-                        console.log(me.chargeur)
-                    }
-
-
-                        break;
-                case Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO:
-
-                    if(me.chargeur === 0){
-                        console.log("plus de balle")
-                    }else {
-
-                        me.diry = 500
-                        me.dirx = 0
-                        me.tir();
-                        console.log(me.chargeur)
-                    }
-
-
-                        break;
-                case Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE:
-
-                    if(me.chargeur === 0){
-                        console.log("plus de balle")
-                    }else {
-
-                        me.diry = 250
-                        me.dirx = -250
-                        me.tir();
-                        console.log(me.chargeur)
-                    }
-
-
-                        break;
-
                 case Phaser.Input.Keyboard.KeyCodes.R:
 
-
-
-                    if(me.NbBalle > 10 && me.chargeur === 0 ) {
+                    if(me.NbBalle > 10 && me.chargeur <= 0 ) {
                         me.chargeur = 10
                         me.NbBalle -= 10
                         console.log("rechargement")
@@ -289,6 +176,11 @@ class Tableau1 extends Phaser.Scene {
             var tir = this.projectiles.getChildren()[i];
             tir.update();
         }
+
+        this.Pballe = this.chargeur > 0;
+
+        this.target.x = game.input.mousePointer.x;
+        this.target.y = game.input.mousePointer.y;
 
     }
 

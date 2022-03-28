@@ -1,0 +1,49 @@
+body{
+    font-family: Impact, DejaVu Sans;
+    font-size: 14px;
+    background-color: #520960;
+    text-align: center;
+    background-position:100% 50%;
+
+
+}
+a{
+    color: #ffffff;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 1s;
+}
+a:hover{
+    color: #ff0000;
+    text-decoration: underline;
+}
+a:visited{
+    color: #880000;
+}
+#game{
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+
+}
+canvas{
+    outline: 1px solid #ff0000;
+}
+#scores{
+    color: #ff0000;
+    font-size : 3vw;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.score{
+    color: #ffffff
+}
+.name{
+    font-size: 3vw;
+}

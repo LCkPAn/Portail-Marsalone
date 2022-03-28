@@ -3,21 +3,31 @@ class Balle extends Phaser.GameObjects.Sprite{
 
         let x = scene.persoA.x;
         let y = scene.persoA.y;
-        let dirx = scene.dirx;
-        let diry = scene.diry;
-        let boss = scene.boss
+
+        let boss = scene.boss;
+
 
         super(scene,x,y,"balle");
 
         scene.add.existing(this);
 
         scene.physics.world.enableBody(this)
-        this.body.velocity.y = diry;
-        this.body.velocity.x = dirx;
         this.setDisplaySize(10,10);
         this.body.setAllowGravity(false);
 
         scene.projectiles.add(this);
+
+        let me = this;
+
+        this.scene.physics.moveToObject(this, this.scene.target, 500);
+
+        this.scene.physics.add.collider(this, boss, function () {
+            console.log('touchePerso');
+            me.destroy(true);
+            boss.setVisible(false);
+
+        })
+
     }
 
     update(){

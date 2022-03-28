@@ -8,6 +8,8 @@ class Tableau1 extends Phaser.Scene {
         this.load.image('circleG','assets/circleG.png');
         this.load.image('circleB','assets/circleB.png');
 
+        this.load.image('grenouille','assets/vf2.png');
+
         this.load.image('Arme1','assets/square.png');
         this.load.image('Arme2','assets/squareY.png');
 
@@ -23,7 +25,7 @@ class Tableau1 extends Phaser.Scene {
 
     create() {
         let me=this;
-
+        this.gauche = true;
 
 
         // Création du personnage de base
@@ -31,6 +33,13 @@ class Tableau1 extends Phaser.Scene {
         this.perso.setDisplaySize(30,30);
         this.perso.body.setAllowGravity(true);
         this.perso.setVisible(true);
+
+        // Création du personnage de base
+        this.ai = this.physics.add.sprite(200, 0, 'grenouille').setOrigin(0, 0);
+        this.ai.setDisplaySize(50,75);
+        this.ai.body.setAllowGravity(true);
+        this.ai.setVisible(true);
+
 
 
         // Création du bouclier
@@ -66,14 +75,39 @@ class Tableau1 extends Phaser.Scene {
 
         platforms.setCollisionByExclusion(-1, true);
 
+
+        // target or player's x, y
+        const tx = this.perso.x
+        const ty = this.perso.y
+
+        const iax = this.ai.x;
+        const iay = this.ai.y;
+
+
+
+
+
         // Creation des collision
 
         this.physics.add.collider(this.perso, platforms);
 
+
+        this.physics.add.collider(this.ai, platforms);
         //Creation des collision entre le shield et le la balle et detruit si toucher
         this.physics.add.collider(this.shield, this.bullet, function () {
             console.log('touche');
             me.bullet.destroy(true)
+        })
+
+
+
+
+
+        this.physics.add.collider(this.bullet, this.perso, function () {
+            console.log('touchePerso');
+            me.bullet.destroy(true);
+            me.perso.destroy(true);
+            me.shield.destroy(true);
         })
 
         this.initKeyboard();
@@ -82,12 +116,32 @@ class Tableau1 extends Phaser.Scene {
 
     update(){
         // on tp constament les shield au joueur
-        this.shield.x = this.perso.x
-        this.shield.y = this.perso.y
+
+        if (this.gauche == true ){
+            this.shield.setFlipX(true);
+            this.shield.x = this.perso.x -10    ;
+            this.shield.y = this.perso.y
+        }
+
+        else {
+            this.shield.setFlipX(false);
+            this.shield.x = this.perso.x + 15 ;
+            this.shield.y = this.perso.y
+        }
+
+
+
+        if (this.perso.x <= this.ai.x){
+            this.ai.setVelocityX(-200)
+        }
+        else {
+            this.ai.setVelocityX(200)
+        }
+
     }
     initKeyboard() {
         let me = this;
-        let gauche = true;
+
         this.input.keyboard.on('keyup', function (kevent) {
             switch (kevent.keyCode) {
 
@@ -110,27 +164,24 @@ class Tableau1 extends Phaser.Scene {
             switch (kevent.keyCode) {
 
                 case Phaser.Input.Keyboard.KeyCodes.Q:
-                        gauche = true;
+                        me.gauche = true;
                         me.perso.setVelocityX(-300);
 
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.D:
-                        gauche = false;
+                        me.gauche = false;
                         me.perso.setVelocityX(300);
 
                     break;
 
                     //Quand on appuie ça fait apparaitre le shield est active son collider
                 case Phaser.Input.Keyboard.KeyCodes.F:
-                 if (gauche == true ){
-                     me.shield.setFlipX(true);
+                 if (me.gauche == true ){
                      me.shield.setVisible(true);
                      me.shield.body.setEnable(true);
                  }
                  else{
-
-                     me.shield.setFlipX(false)
                      me.shield.setVisible(true);
                      me.shield.body.setEnable(true);
                  }
