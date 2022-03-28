@@ -21,24 +21,23 @@ class Dash extends Phaser.Scene {
         platforms.create(600, 450, 'ground');
         platforms.create(50, 250, 'ground');
         platforms.create(750, 220, 'ground');
+        this.platforms = platforms.create(450, 420, 'ground').setDisplaySize(10,350).refreshBody();
 
 
-        this.toto={
-            a:0,
+        this.speed={
+            speedDash:1,
         }
-        this.toto.setVelocity(this.toto.a)
 
-
-        this.tweens.add({
-            targets: this.toto,
-            a: 100,
+        this.dash = this.tweens.add({
+            targets: this.speed,
+            speedDash: 0,
             // alpha: { start: 0, to: 1 },
             // alpha: 1,
             // alpha: '+=1',
-            ease: "Linear", // 'Cubic', 'Elastic', 'Bounce', 'Back'
-            duration: 2000,
-            repeat: -1, // -1: infinity
-            yoyo: true
+            ease: "Circ.easeInOut", // 'Cubic', 'Elastic', 'Bounce', 'Back'
+            duration: 300,
+            //repeat: -1, // -1: infinity
+            //yoyo: true
         });
 
 //CREATION DES ACTIONS DU PERSONNAGE
@@ -85,17 +84,19 @@ class Dash extends Phaser.Scene {
         let me = this;
         this.input.keyboard.on('keydown', function (kevent) {
             switch (kevent.keyCode) {
+                case Phaser.Input.Keyboard.KeyCodes.SHIFT:
+                    me.shiftDown=true;
+
+                    break;
                 case Phaser.Input.Keyboard.KeyCodes.UP:
                     me.upDown=true;
                     if (me.player.body.touching.down)
                     {
                         me.player.setVelocityY(-330);//LE JOUR VA A UNE VITESSE DE 330 VERS LE HAUT
                     }
-                    console.log("up")
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
                     me.rightDown=true;
-                    console.log('right');
                     me.player.setVelocityX(160);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 160 A DROITE
                     me.player.anims.play('right', true);//ET ON LUI DEMANDE DE LANCER L'ANIMATION RIGHT QU'ON A CREE DANS LA FONCTION CREATE
                     break;
@@ -108,6 +109,10 @@ class Dash extends Phaser.Scene {
         });
         this.input.keyboard.on('keyup', function (kevent) {
             switch (kevent.keyCode) {
+                case Phaser.Input.Keyboard.KeyCodes.SHIFT:
+                    me.shiftDown=false;
+
+                    break;
                 case Phaser.Input.Keyboard.KeyCodes.UP:
                     me.upDown=false;
 
@@ -131,10 +136,41 @@ class Dash extends Phaser.Scene {
     }
     update ()
     {
-        console.log(this.toto,this.toto.a)
-        if (this.upDown && this.player.body.velocity.y>20){
-            this.player.body.setMaxVelocityY(20)
-            console.log(this.player.body.velocity.y);
+        if (this.shiftDown && this.rightDown){
+            if (this.flag){
+
+            }else{
+                this.dash.play();
+                this.flag=true;
+            }
+            this.player.setVelocityX(1000 * this.speed.speedDash);
+            console.log(this.speed.speedDash);
+        }
+
+        if (this.shiftDown && this.leftDown){
+            if (this.flag){
+
+            }else{
+                this.dash.play();
+                this.flag=true;
+            }
+            this.player.setVelocityX(-1000 * this.speed.speedDash);
+            console.log(this.speed.speedDash);
+        }
+
+        if (!this.shiftDown){
+            if (this.flag){
+                this.flag=false;
+            }
+        }
+
+
+        if (!this.shiftDown && this.rightDown){
+            this.player.setVelocityX(160);
+        }
+
+        else if (!this.shiftDown && this.leftDown){
+            this.player.setVelocityX(-160);
         }
     }
 

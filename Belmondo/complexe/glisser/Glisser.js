@@ -144,7 +144,6 @@ class Glisser extends Phaser.Scene {
 
                 }else{
                     this.glissade.play();
-
                     this.flag=true;
                 }
                 console.log(this.player.getCenter());
@@ -157,7 +156,6 @@ class Glisser extends Phaser.Scene {
 
                 }else{
                     this.glissade.play();
-
                     this.flag=true;
                 }
                 player.body.setOffset(0,28);
