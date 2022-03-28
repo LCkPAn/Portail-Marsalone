@@ -21,14 +21,15 @@ class Glisser extends Phaser.Scene {
         this.platforms = platforms.create(600, 400, 'ground');
         this.platforms = platforms.create(50, 250, 'ground');
         this.platforms = platforms.create(750, 220, 'ground');
-        this.platforms = platforms.create(950, 320, 'ground').setDisplaySize(10,500).refreshBody();
-
+        this.platforms = platforms.create(650, 320, 'ground').setDisplaySize(10,350).refreshBody();
 
 //CREATION DES ACTIONS DU PERSONNAGE
         this.player = player = this.physics.add.sprite(100, 450, 'dude');
 
         //player.setBounce(0.2);// REBONDISSEMENT DU PERSONNAGE LORSQU'IL SAUTE
         player.setCollideWorldBounds(true);//COLLISION AVEC TOUS LES OBJETS DU JEU
+
+
 //CREATION DES ANIMATIONS DU PERSONNAGE GRACE AU SPRITESHEET
         this.anims.create({
             key: 'left',
@@ -143,27 +144,31 @@ class Glisser extends Phaser.Scene {
 
                 }else{
                     this.glissade.play();
-
                     this.flag=true;
                 }
-                console.log(this.speed.speedMultiple);
+                console.log(this.player.getCenter());
                 this.player.setVelocityX(160 * this.speed.speedMultiple);
+                player.body.setOffset(0,28);
+                this.player.body.setSize(this.player.sourceWidth, 20, false);
             }
             if (this.shiftDown && this.leftDown){
                 if (this.flag){
 
                 }else{
                     this.glissade.play();
-
                     this.flag=true;
                 }
-                console.log(this.speed.speedMultiple);
+                player.body.setOffset(0,28);
+                this.player.body.setSize(this.player.sourceWidth, 20, false);
                 this.player.setVelocityX(-160 * this.speed.speedMultiple);
+                console.log(this.player.getCenter());
             }
             if (!this.shiftDown){
                 if (this.flag){
                     this.player.setVelocityX(0);
                     this.flag=false;
+                    player.body.setOffset(0,0);
+                    this.player.body.setSize(this.player.sourceWidth, this.player.sourceHeight, true);
                 }
             }
         }
