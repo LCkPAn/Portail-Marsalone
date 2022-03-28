@@ -23,10 +23,9 @@ class Dash extends Phaser.Scene {
         platforms.create(750, 220, 'ground');
         this.platforms = platforms.create(450, 420, 'ground').setDisplaySize(10,350).refreshBody();
 
-
         this.speed={
             speedDash:1,
-        }
+    }
 
         this.dash = this.tweens.add({
             targets: this.speed,
@@ -164,7 +163,6 @@ class Dash extends Phaser.Scene {
             }
         }
 
-
         if (!this.shiftDown && this.rightDown){
             this.player.setVelocityX(160);
         }
@@ -173,6 +171,5 @@ class Dash extends Phaser.Scene {
             this.player.setVelocityX(-160);
         }
     }
-
 }
 

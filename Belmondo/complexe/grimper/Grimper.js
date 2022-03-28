@@ -68,12 +68,12 @@ class Grimper extends Phaser.Scene {
 
 
 
-        this.physics.add.overlap(player, this.lianne,this.test.bind(this),null,this)
+        this.physics.add.overlap(player, this.lianne,this.tuch.bind(this),null,this)
 
         this.initKeyboard()
     }
 
-    test(player, lianne){
+    tuch(player, lianne){
         this.player.onlianne=true
         console.log(player.onlianne)
     }
