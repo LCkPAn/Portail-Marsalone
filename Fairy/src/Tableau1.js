@@ -18,11 +18,10 @@ class Tableau1 extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         //CAMERA
-        this.zoom = 1;
-        this.cameras.main.setBounds(0, 0, this.largeurniveau, this.hauteurniveau);
-        this.cameras.main.setZoom(1);
+        this.zoom = 1; //variable du zoom à 1 (valeur initiale)
+        this.cameras.main.setBounds(0, 0, this.largeurniveau, this.hauteurniveau);//la caméra ne peux pas dépasser les bordures du niveau
+        this.cameras.main.setZoom(this.zoom);//la caméra zoom autant que le variable zoom
 
-        this.scrollspeed=0
 
         this.initKeyboard();
 
@@ -132,12 +131,11 @@ class Tableau1 extends Phaser.Scene {
         }
 
         //CAMERA
-        this.cameras.main.scrollX+=this.scrollspeed;
         if(this.vuelarge == false) //tant que la vue n'est pas large
         {
             this.cameras.main.centerOn(this.player.x,this.player.y); //la caméra se centre sur le joueur
             this.cameras.main.useBounds=true; //la caméra ne peut pas traverser la map
-            this.cameras.main.setBounds(0, 0, this.largeurniveau, this.hauteurniveau);
+            this.cameras.main.setBounds(0, 0, this.largeurniveau, this.hauteurniveau);//on remet "l'anti-débordement" comme on l'enlève en vue large
         }
     }
 
