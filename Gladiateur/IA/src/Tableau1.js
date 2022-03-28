@@ -27,7 +27,7 @@ class Tableau1 extends Phaser.Scene {
 
     create() {
 
-        this.Zone = false;
+        this.changementAI = false;
         let me=this;
         this.gauche = true;
         this.CD = true;
@@ -45,7 +45,7 @@ class Tableau1 extends Phaser.Scene {
         this.perso.hp = 300;
 
         // Création du personnage de base
-        this.ai = this.physics.add.sprite(150, 0, 'grenouille').setOrigin(0, 0);
+        this.ai = this.physics.add.sprite(900, 0, 'grenouille').setOrigin(0, 0);
         this.ai.setDisplaySize(50,75);
         this.ai.body.setAllowGravity(true);
         this.ai.setVisible(true);
@@ -71,6 +71,7 @@ class Tableau1 extends Phaser.Scene {
         this.bullet = this.physics.add.sprite(200, 180,'Arme1').setOrigin(0, 0);
         this.bullet.setDisplaySize(20,20);
         this.bullet.body.setAllowGravity(false);
+        this.bullet.setVisible(false);
 
 
         // chargement de la map
@@ -244,17 +245,9 @@ class Tableau1 extends Phaser.Scene {
         }
 
 
-       this.IaGestion2()
+            this.IaGesttion()
 
-
-        //this.time.addEvent({
-          //  delay: 500,
-            //callback: ()=>{
-              //  this.tir();
-            //},
-            //loop: true
-        //})
-
+            this.IaGestion2()
 
 
         if(this.perso.hp <= 0){
